@@ -5,12 +5,12 @@ TAD OficinaPostal
     usa: bool, nat, cartero, paquete, multiconj, conj
 
     generadores:
-        nuevaOp		: 	conj(cartero) c								     → op
-        almacenar	:	multiconj(paquete) p  ×  op o  					 → op
-        entregar	:	multiconj(paquete) bolsa  × cartero c ×  op o  	 → op 
-            {(∀p :paquete)(p ∈ bolsa →L cp(p) = cp(c)) ∧ sumaPeso(bolsa)<25 ∧ c∈carteros(o)\despedidos(o) ∧ bolsa⊆deposito(o)}
+        nuevaOp     : conj(cartero) c  → op
+        almacenar   : multiconj(paquete) p  ×  op o  → op
+        entregar    : multiconj(paquete) bolsa  × cartero c ×  op o  → op 
+            {(∀p:paquete)(p ∈ bolsa →L cp(p) = cp(c)) ∧ sumaPeso(bolsa)<25 ∧ c∈carteros(o)\despedidos(o) ∧ bolsa⊆deposito(o)}
     	
-        finalizarRecorrido: conj(paquete) bolsa × cartero c × op o 	     → op  
+        finalizarRecorrido: conj(paquete) bolsa × cartero c × op o  → op  
             {bolsa ⊂ paqueteDeCartero(o) ∧ c ∈ carteros(o)\despedidos(o)}
 
     observadores básicos:
