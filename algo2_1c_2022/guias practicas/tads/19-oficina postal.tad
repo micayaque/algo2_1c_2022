@@ -1,0 +1,101 @@
+TAD OficinaPostal
+
+    géneros: op
+    exporta: observadores básicos, generadores
+    usa: bool, nat, cartero, paquete, multiconj, conj
+
+    generadores:
+        nuevaOp		: 	conj(cartero) c								     → op
+        almacenar	:	multiconj(paquete) p  ×  op o  					 → op
+        entregar	:	multiconj(paquete) bolsa  × cartero c ×  op o  	 → op 
+            {(∀p :paquete)(p ∈ bolsa →L cp(p) = cp(c)) ∧ sumaPeso(bolsa)<25 ∧ c∈carteros(o)\despedidos(o) ∧ bolsa⊆deposito(o)}
+    	
+        finalizarRecorrido: conj(paquete) bolsa × cartero c × op o 	     → op  
+            {bolsa ⊂ paqueteDeCartero(o) ∧ c ∈ carteros(o)\despedidos(o)}
+
+    observadores básicos:
+    	carteros         :   op o                → conj(cartero)
+        paqueteDeCartero :   op o × cartero c    → multiconj(paquete)    {c ∈ carteros(o)\despedidos(o)}
+    	deposito         :   op o                → multiconj(paquete)
+        despedidos       :   op o                → conj(cartero)            
+
+    otras operaciones:
+        sumaPeso: multiconj(paquete)    → nat
+
+    axiomas:
+        carteros(nuevaOp(c))                      ≡   c
+        carteros(almacenar(p,o))                  ≡   carteros(o)
+        carteros(entregar(bolsa, c, o))           ≡   carteros(o)
+        carteros(finalizarRecorrido(bolsa,c,o))   ≡   carteros(o)
+
+        paqueteDeCartero(nuevaOp(c'),c)         ≡   ∅
+        paqueteDeCartero(almacenar(p,o),c)      ≡   paqueteDeCartero(c,o)
+        paqueteDeCartero(entregar(bolsa,c',o),c)≡   if c == c' then
+                                                        bolsa
+                                                    else
+                                                        paqueteDeCartero(o,c)
+                                                    fi
+        paqueteDeCartero(finalizarRecorrido(bolsa,c',o),c)≡ if c == c' then
+                                                                ∅
+                                                            else
+                                                                paqueteDeCartero(o,c)
+                                                            fi
+
+        deposito(nuevaOp(c))                    ≡   ∅
+        deposito(almacenar(p,o))                ≡   deposito(o) U p
+        deposito(entregar(bolsa,c,o))           ≡   deposito(o) \ bolsa
+        deposito(finalizarRecorrido(bolsa,c,o)) ≡   deposito(o) U bolsa
+
+        despedidos(nuevaOp(c))                      ≡   ∅
+        despedidos(almacenar(p,o))                  ≡   despedidos(o)
+        despedidos(entregar(bolsa,c,o))             ≡   despedidos(o)
+        despedidos(finalizarRecorrido(bolsa,c,o))   ≡   if bolsa == paqueteDeCartero(o,c) then
+                                                            Ag(despedidos(o),c)
+                                                        else
+                                                            despedidos(o)
+                                                        fi
+
+        sumaPeso(c) ≡   if ∅?(c) then
+                            0
+                        else
+                            peso(dameUno(c)) + sumaPeso(sinUno(c))
+                        fi
+
+Fin TAD
+
+TAD Cartero
+
+    géneros: cartero
+    exporta: observadores básicos, generadores
+    usa: bool, nat, paquete
+
+    generadores:
+        nuevoCartero: nat c → cartero
+
+    observadores básicos:
+        cp: cartero c → nat
+
+    axiomas:
+        cp(nuevoCartero(c)) ≡ c
+
+Fin TAD
+
+TAD Paquete
+
+    géneros: paquete
+    exporta: observadores básicos, generadores
+    usa: bool, nat
+
+    generadores:
+        nuevoPaquete: peso p × nat c → paquete
+
+    observadores básicos:
+        peso: paquete p → nat
+        cp: paquete p → nat
+
+    axiomas:
+        peso(nuevoPaquete(p,c)) ≡   p
+
+        cp(nuevoPaquete(p,c))   ≡   c
+
+Fin TAD

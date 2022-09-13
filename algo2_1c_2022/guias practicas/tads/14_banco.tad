@@ -1,0 +1,114 @@
+TAD Tipo 	es string
+TAD Caja 	es string 
+
+TAD Banco
+
+    géneros: banco
+
+    exporta: observadores básicos, generadores
+
+    usa: bool, nat, persona
+
+    igualdad observacional:
+    	(∀b₁, b₂ : banco)(b₁ =obs b₂ ⇔ (cola(b₁) =obs cola(b₂) ∧ (∀p:persona) (entro?(p,b₁) =obs entro?(p,b₂)) 
+    		∧ (∀ c:caja)(aQuienesAtendio(c,b₁) =obs aQuienesAtendio(c,b₂)))
+
+    generadores:
+        iniciar		: 						→ banco
+        llegaPersona: persona p ×  banco b  → banco		{¬esta?(p,cola(b))}
+        atender		: caja c  	×  banco b	→ banco		{¬vacia?(cola(b))}
+        retirarse	: persona p ×  banco b 	→ banco		{esta?(p,cola(b))}
+
+    observadores básicos:
+        cola b 			: banco b 				→ secu(persona)
+        entro?			: persona p × banco b 	→ bool
+        aQuienesAtendio	: caja c 	× banco b 	→ conj(persona)
+
+    otras operaciones:
+        hayGenteBienEsperando?	: secu(persona)  			→ bool
+        quitar					: secu(persona) × persona p → secu(persona)
+        salio?					: persona p 	× banco b 	→ bool
+        primerBien				: secu(persona) s 			→ bool {¬vacia?(s) ∧ hayGenteBienEsperando?(s)}
+
+    axiomas:
+        cola(iniciar)			≡ 	vacia
+        cola(llegaPersona(p,b)) ≡ 	cola(b) ◉	 p
+        cola(atender(c,b))		≡ 	if c == "A" ∧ hayGenteBienEsperando?(cola(b)) then
+        								quitar(cola(b),primerBien(cola(b)))
+        							else
+        								if hayGenteBienEsperando?(cola(b)) then
+        									quitar(cola(b),primerBien(cola(b)))
+        								else
+        									fin(cola(b))
+        								fi
+        							fi 
+        cola(retirarse(p,b))	≡ 	quitar(cola(b),p)
+
+        entro?(p,abrir)				≡	false
+        entro?(p,llegaPersona(p',b))≡	p == p'	∨	entro?(p,b)
+        entro?(p,atender(c,b))		≡	entro?(p,b)
+        entro?(p,retirarse(p',b))	≡	p == p' ∨ entro?(p,b)
+
+        aQuienesAtendio(c,abrir)				≡	∅
+        aQuienesAtendio(c,llegaPersona(p',b))	≡	aQuienesAtendio(c,b)
+        aQuienesAtendio(c,atender(c',b))		≡	if c == c' ∧ hayGenteBienEsperando?(cola(b)) then
+											        	Ag(aQuienesAtendio(c,b),primerBien(cola(b)))
+											        else
+											        	if c == c' ∧ c' == "B" then
+											        		Ag(aQuienesAtendio(c,b),prim(cola(b)))
+											        	else
+											        		aQuienesAtendio(c,b)
+											        	fi
+											        fi
+
+		hayGenteBienEsperando?(s) ≡ if vacia?(s) then
+										false
+									else
+										if condicion(prim(s)) == "gente bien" then
+											true
+										else
+											hayGenteBienEsperando?(fin(s))
+										fi
+									fi
+
+		quitar(s,p)	≡	if vacia?(s) then
+							[]
+						else
+							if prim(s) == p then
+								quitar(fin(s),p)
+							else
+								prim(s)◉quitar(fin(s),p)
+							fi
+						fi
+
+		primerBien(s)	≡	if condicion(prim(s)) == "gente bien" then
+								prim(s)
+							else
+								primerBien(fin(s))
+							fi
+
+		salio?(p,b)	≡	p ∈ aQuienesAtendio("A",b) ∨ p ∈ aQuienesAtendio?("B",b)
+							∨	(entro?(p,b) ∧ ¬esta?(p,cola(b)))
+
+Fin TAD
+
+TAD Persona
+
+    géneros: persona
+
+    exporta: observadores básicos, generadores
+
+    usa: bool, nat
+
+    generadores:
+        nuevaPersona: nat d × string t → persona
+
+    observadores básicos        
+    	DNI : persona p → nat
+    	tipo: persona p → string
+
+    axiomas:
+        DNI(nuevaPersona(d,t)) 	≡ d
+        tipo(nuevaPersona(d,t)) ≡ t
+
+Fin TAD

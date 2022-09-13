@@ -1,0 +1,31 @@
+TAD Baño
+
+    géneros: baño
+
+    exporta: observadores básicos, generadores
+
+    usa: bool, nat
+
+    generadores:
+        nuevoBaño			: 						→ baño
+        solicitarIrAlBaño	: alumno a  ×  baño b  	→ baño 	{#vecesQueFueAlBaño(b,a) < 3}
+        irAlBaño 			: alumno a  ×  baño b 	→ baño  {esta?(a,cola(b))}
+        volverASentarse		: alumno a  ×  baño b  	→ baño  {esta?(a,cola(b))}
+
+    observadores básicos:
+        cola 				: baño 				→ colaPrior(alumno)
+        #vecesQueFueAlBaño	: baño b × alumno a → nat
+        estaOcupado?		: baño b 			→ bool
+
+    otras operaciones:
+        sacarDeLaColaA	: alumno a × colaPrior(alumno) c → colaPrior(alumno)
+
+    axiomas:
+        cola(nuevoBaño)				≡	vacia
+        cola(solicitarIrAlBaño(a,b)	≡	encolar(a,cola(b))
+        cola(irAlBaño(a,b))			≡	desencolar(cola(b)) 	
+        cola(volverASentarse(a,b))	≡	sacarDeLaColaA(a,cola(b))
+
+        
+        
+Fin TAD
