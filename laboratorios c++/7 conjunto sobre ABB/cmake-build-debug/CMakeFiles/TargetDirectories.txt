@@ -1,0 +1,6 @@
+C:/Users/Mica/OneDrive/Escritorio/Algo2/labos/7 abb/taller_conjunto_sobre_ABB/cmake-build-debug/CMakeFiles/gtest.dir
+C:/Users/Mica/OneDrive/Escritorio/Algo2/labos/7 abb/taller_conjunto_sobre_ABB/cmake-build-debug/CMakeFiles/gtest_main.dir
+C:/Users/Mica/OneDrive/Escritorio/Algo2/labos/7 abb/taller_conjunto_sobre_ABB/cmake-build-debug/CMakeFiles/correrTests.dir
+C:/Users/Mica/OneDrive/Escritorio/Algo2/labos/7 abb/taller_conjunto_sobre_ABB/cmake-build-debug/CMakeFiles/correrValgrind.dir
+C:/Users/Mica/OneDrive/Escritorio/Algo2/labos/7 abb/taller_conjunto_sobre_ABB/cmake-build-debug/CMakeFiles/edit_cache.dir
+C:/Users/Mica/OneDrive/Escritorio/Algo2/labos/7 abb/taller_conjunto_sobre_ABB/cmake-build-debug/CMakeFiles/rebuild_cache.dir

@@ -1,0 +1,12 @@
+C:/Users/Mica/OneDrive/Escritorio/Algo2/labos/6 iteradores/ejercitacion_iteradores_5/cmake-build-debug/CMakeFiles/ej4.dir
+C:/Users/Mica/OneDrive/Escritorio/Algo2/labos/6 iteradores/ejercitacion_iteradores_5/cmake-build-debug/CMakeFiles/gtest.dir
+C:/Users/Mica/OneDrive/Escritorio/Algo2/labos/6 iteradores/ejercitacion_iteradores_5/cmake-build-debug/CMakeFiles/ej8.dir
+C:/Users/Mica/OneDrive/Escritorio/Algo2/labos/6 iteradores/ejercitacion_iteradores_5/cmake-build-debug/CMakeFiles/gtest_main.dir
+C:/Users/Mica/OneDrive/Escritorio/Algo2/labos/6 iteradores/ejercitacion_iteradores_5/cmake-build-debug/CMakeFiles/ej1.dir
+C:/Users/Mica/OneDrive/Escritorio/Algo2/labos/6 iteradores/ejercitacion_iteradores_5/cmake-build-debug/CMakeFiles/ej2.dir
+C:/Users/Mica/OneDrive/Escritorio/Algo2/labos/6 iteradores/ejercitacion_iteradores_5/cmake-build-debug/CMakeFiles/ej3.dir
+C:/Users/Mica/OneDrive/Escritorio/Algo2/labos/6 iteradores/ejercitacion_iteradores_5/cmake-build-debug/CMakeFiles/ej5.dir
+C:/Users/Mica/OneDrive/Escritorio/Algo2/labos/6 iteradores/ejercitacion_iteradores_5/cmake-build-debug/CMakeFiles/ej6.dir
+C:/Users/Mica/OneDrive/Escritorio/Algo2/labos/6 iteradores/ejercitacion_iteradores_5/cmake-build-debug/CMakeFiles/ej7.dir
+C:/Users/Mica/OneDrive/Escritorio/Algo2/labos/6 iteradores/ejercitacion_iteradores_5/cmake-build-debug/CMakeFiles/edit_cache.dir
+C:/Users/Mica/OneDrive/Escritorio/Algo2/labos/6 iteradores/ejercitacion_iteradores_5/cmake-build-debug/CMakeFiles/rebuild_cache.dir

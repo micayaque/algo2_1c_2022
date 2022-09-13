@@ -1,0 +1,7 @@
+C:/Users/Mica/OneDrive/Escritorio/Algo2/Labos/8 dicctrie/ejercitacion-trie/cmake-build-debug/CMakeFiles/gtest.dir
+C:/Users/Mica/OneDrive/Escritorio/Algo2/Labos/8 dicctrie/ejercitacion-trie/cmake-build-debug/CMakeFiles/gtest_main.dir
+C:/Users/Mica/OneDrive/Escritorio/Algo2/Labos/8 dicctrie/ejercitacion-trie/cmake-build-debug/CMakeFiles/correrTests_ext.dir
+C:/Users/Mica/OneDrive/Escritorio/Algo2/Labos/8 dicctrie/ejercitacion-trie/cmake-build-debug/CMakeFiles/correrTests.dir
+C:/Users/Mica/OneDrive/Escritorio/Algo2/Labos/8 dicctrie/ejercitacion-trie/cmake-build-debug/CMakeFiles/correrValgrind.dir
+C:/Users/Mica/OneDrive/Escritorio/Algo2/Labos/8 dicctrie/ejercitacion-trie/cmake-build-debug/CMakeFiles/edit_cache.dir
+C:/Users/Mica/OneDrive/Escritorio/Algo2/Labos/8 dicctrie/ejercitacion-trie/cmake-build-debug/CMakeFiles/rebuild_cache.dir
