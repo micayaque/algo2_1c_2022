@@ -1,0 +1,115 @@
+(1)
+
+clavesMayoresA:	dicc( α x nat)  x nat  → conj(α)
+
+clavesMayoresA(d,n)	≡	if vacio?(d) then 
+							∅
+						else
+							if obtener(dameUno(claves(d)),d) >= n then 
+								Ag(dameUno(claves(d)),clavesMayoresA(borrar(dameUno(claves(d)),d)),n)
+							fi
+						fi
+
+(2)
+
+TAD Calamar es nat
+
+TAD Calamar43
+
+    géneros: juego
+    exporta: observadores básicos, generadores
+    usa: bool, nat
+
+    generadores:
+        nuevoJuego		: conj(calamar) c × nat l → juego
+        avanzarCalamar  : juego j × calamar c × nat p  → juego 		{c ∈ calamaresEnJuego(j) ∧ p <= llegada(j)}
+        finalizarTurno	: juego j × nat p → juego 					{p <= llegada(j)}
+
+    observadores básicos:
+        turno			: juego j → nat
+        posicionActual	: juego j × calamar c → nat
+        llegada			: juego j → nat
+        calamares 		: juego j → conj(calamar)
+        calamaresEnJuego: juego j → conj(calamar)
+
+    igualdad observacional:
+    	(∀j₁, j₂ : juego)(j₁ =obs j₂ ⇔ turno(j₁) =obs turno(j₂) ∧ llegada(j₁) =obs llegada(j₂) ∧ calamares(j₁) = calamares(j₂) 
+    		∧ calamaresEnJuego(j₁) = calamaresEnJuego(j₂) ∧ (∀ c:calamar)(c ∈ calamaresEnJuego(j₁) →L posicionActual(c,j₁) =obs 
+    			posicionActual(c,j₂)))
+
+    otras operaciones:
+        calamaresDelantera		: juego j → conj(calamar)
+        calamaresDelanteraAux	: conj(calamar) c × nat m  × juego j → conj(calamar)
+        eliminarCalamares		: conj(calamar) c × nat p × juego j  → conj(calamar)
+        maximaPosicion			: conj(calamar) c × juego j → nat
+
+    axiomas:
+        turno(nuevoJuego(c,l)) 			≡ 0
+        turno(avanzarCalamar(j,c,p)) 	≡ turno(j)
+        turno(finalizarTurno(j,p)) 		≡ turno(j) + 1
+
+        llegada(nuevoJuego(c,l)) 		≡ l
+        llegada(avanzarCalamar(j,c,p)) 	≡ llegada(j)
+        llegada(finalizarTurno(j,p)) 	≡ llegada(j)
+
+        calamares(nuevoJuego(c,l)) 			≡ c
+        calamares(avanzarCalamar(jc,c,p)) 	≡ calamares(j)
+        calamares(finalizarTurno(j,p)) 		≡ calamares(j)
+
+        calamaresEnJuego(nuevoJuego(c,l)) 		≡ c
+        calamaresEnJuego(avanzarCalamar(j,c,p)) ≡ calamaresEnJuego(j)
+        calamaresEnJuego(finalizarTurno(j,p)) 	≡ eliminarCalamares(calamaresEnJuego(j),p)
+
+        posicionActual(nuevoJuego(c,l),c') 			≡ 0
+        posicionActual(avanzarCalamar(j,c,p),c') 	≡ 	if c == c' then 
+        													posicionActual(c) + p 
+        												else 
+        													posicionActual(c')
+        												fi 
+        posicionActual(finalizarTurno(j,p),c) 		≡	posicionActual(j,c)
+
+        eliminarCalamares(c,p,j) ≡ 	if ∅?(c) then 
+        								∅
+	        						else 
+	        							if posicionActual(j,dameUno(c)) > p then 
+	        								eliminarCalamares(sinUno(c),p,j)
+	        							else 
+	        								Ag(dameUno(c),eliminarCalamares(sinUno(c),p,j))
+	        							fi 
+	        						fi
+
+	    calamaresDelantera(j) ≡ calamaresDelanteraAux(calamaresEnJuego(j),maximaPosicion(calamares(j)),j)
+
+	    calamaresDelanteraAux(c,m,j) ≡ 	if ∅?(c) then 
+	    									∅
+	    								else 
+	    									if posicionActual(dameUno(c),j) == m then 
+	    										Ag(dameUno(c),calamaresDelanteraAux(sinUno(c),m,j))
+	    									else 
+	    										calamaresDelanteraAux(sinUno(c),m,j)
+	    									fi 
+	    								fi 
+	    maximaPosicion(c,j) ≡ 	if ∅?(c) then 
+	    							0 
+	    						else 
+	    							max {posicionActual(j,dameUno(c)) , maximaPosicion(sinUno(c),j)}
+	    						fi
+Fin TAD
+
+(3)
+
+paradas(inaugurarSC(ps,m))	≡	ps
+paradas(abordar(sc,p))		≡	rotarParada(paradas(sc))
+paradas(avanzarParada(sc))	≡	paradas(sc)
+
+bajanEn(inaugurarSC(ps,m),p')	≡	0
+bajanEn(abordar(sc,p),p')		≡	if p' == p then 
+										1 + bajanEn(sc,p')
+									else 
+										bajanEn(sc,p')
+									fi
+bajanEn(avanzarParada(sc),p')	≡	if paradaActual(sc) == p' then 
+										0
+									else 
+										bajanEn(sc,p')
+									fi 
