@@ -1,0 +1,57 @@
+TAD CCC
+
+    géneros: ccc
+    exporta: observadores básicos, generadores
+    usa: bool, nat
+
+    generadores:
+        crearCCC: conj(persona) ms → ccc {m != ∅}
+        nuevoTutor: persona p × ccc c × persona t → ccc {p ∉ maestros(c) U desertores(c) ∧ nivel(t,c) >= nivel(p,c) 
+        															∧ t ∈ maestros(c) U aprendices(c)}
+        avanzarNivel: persona p × ccc c → ccc {p ∈ aprendices(c)} 					{nivel(p) < 10}
+        desertar: persona p × ccc c → ccc {p ∈ aprendices(c) U maestros(c)}
+
+    observadores básicos:
+        maestros: ccc → conj(persona)
+        nivel: persona p × ccc c → nat 			{p ∈ maestros(c) U aprendices(c)}
+        desertores: ccc c → conj(persona) 
+        aprendices: ccc c → conj(persona)
+        aprendicesDe: persona p × ccc c → conj(persona)	{p ∈ maestros(c) U aprendices(c) }
+
+    otras operaciones:
+        descendientesAcademicos: ccc c × persona p → conj(persona)
+
+    axiomas:
+        maestros(crearCCC(m)) ≡ m 
+        maestros(nuevoTutor(p,c,t)) ≡ maestros(c)
+        maestros(avanzarNivel(p,c)) ≡ maestros(c)
+        maestros(desertar(p,c)) ≡ maestros(c)
+
+        nivel(p,crearCCC(m)) ≡ 	if p ∈ m then 
+        							10 
+        						else 
+        							0 
+        						fi
+       	nivel(p,nuevoTutor(p',c,t)) ≡ 	if p==p' then 
+       										1 
+       									else 
+       										nivel(p,c)
+       									fi
+       	nivel(p,avanzarNivel(p',c))	≡ 	if p==p' then 
+       										nivel(p,c) + 1 
+       									else 
+       										nivel(p,c)
+       									fi 
+       	nivel(p,desertar(p',c)) ≡ 	if p == p' then 
+       									0
+       								else 
+       									nivel(p,c)
+       								fi
+       	desertores(crearCCC(m)) ≡ ∅ 
+       	desertores(nuevoTutor(p,c,t)) ≡ desertores(c)
+       	desertores(avanzarNivel(p,c)) ≡ desertores(c)
+       	desertores(desertar(p,c)) ≡ Ag(p,desertores(c))
+
+       	aprendices(crearCCC(m)) ≡ ∅
+       	aprendices(nuevoTutor(p,c,t)) ≡ if nivel(p,c)
+Fin TAD

@@ -99,8 +99,12 @@ Fin TAD
 (3)
 
 paradas(inaugurarSC(ps,m))	≡	ps
-paradas(abordar(sc,p))		≡	rotarParada(paradas(sc))
-paradas(avanzarParada(sc))	≡	paradas(sc)
+paradas(abordar(sc,p))		≡	if cantidadPasajeros(paradas(sc),sc) == maxPasajeros(sc) then 
+									rotarHastaTenerEspacio(paradas(sc),sc)
+								else 
+									paradas(sc)
+								fi
+paradas(avanzarParada(sc))	≡	rotarParada(paradas(sc))
 
 bajanEn(inaugurarSC(ps,m),p')	≡	0
 bajanEn(abordar(sc,p),p')		≡	if p' == p then 
@@ -113,3 +117,8 @@ bajanEn(avanzarParada(sc),p')	≡	if paradaActual(sc) == p' then
 									else 
 										bajanEn(sc,p')
 									fi 
+rotarHastaTenerEspacio(ps,sc) ≡ if bajanEn(sc,prim(ps)) > 0 then 
+									ps 
+								else 
+									rotarHastaTenerEspacio(rotarParada(ps),sc)
+								fi

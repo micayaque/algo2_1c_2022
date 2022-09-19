@@ -1,0 +1,126 @@
+TAD Tecnico es string
+
+TAD Tecnicos a Domicilio
+
+    géneros: TaD
+    exporta: observadores básicos, generadores
+    usa: bool, nat
+
+    generadores:
+        nuevoTaD: conj(tecnico) g → TaD                         {¬∅(g)}
+        solicitarTecnico: direccion d × TaD e → TaD 
+        atenderPedido: TaD t × tecnico t' → TaD                {t' ∈ tecnicosOcupados(t)}
+
+    observadores básicos:
+        grupoDeTecnicos: TaD → conj(tecnico)
+        tecnicosDisponibles: TaD → conj(tecnico)
+        pedidosPendientes: TaD → conj(direccion)  
+        ubicacion: TaD t × tecnico t' → direccion               {t' ∈ tecnicosOcupados(t)}
+        vecesVisitadas: TaD t × tecnico t' direccion d → nat    {t' ∈ grupoDeTecnicos(t)}
+
+    otras operaciones:
+        tecnicosOcupados: TaD → conj(tecnico)
+        tecnicosQueMasVisitaronA: TaD t × direccion d × conj(tecnico) ts → conj(tecnico)
+        masCercanoA: TaD t x tecnico t' x secu(direccion) sd → direccion                    {long(sd)>=1}
+        maxVisitas: TaD t × conj(tecnico) ts × direccion d → nat 
+
+    axiomas: ∀t:TaD, ∀t':tecnico, ∀d:direccion
+        grupoDeTecnicos(crear(g)) ≡ g 
+        grupoDeTecnicos(solicitarTecnico(t,d)) ≡ grupoDeTecnicos(t)
+        grupoDeTecnicos(atenderPedido(t,t')) ≡ grupoDeTecnicos(t)
+
+        tecnicosDisponibles(crear(g)) ≡ g 
+        tecnicosDisponibles(solicitarTecnico(t,d)) ≡    if ∅?(tecnicosDisponibles(t)) then 
+                                                            ∅
+                                                        else 
+                                                            sinUno(tecnicosDisponibles(t)) 
+                                                        fi 
+        tecnicosDisponibles(atenderPedido(t,t')) ≡  if pedidosPendientes(t) == vacia then 
+                                                        tecnicosDisponibles(t) U {t'} 
+                                                    else 
+                                                        ∅
+                                                    fi 
+        pedidosPendientes(crear(g)) ≡ <> 
+        pedidosPendientes(solicitarTecnico(t,d)) ≡  if tecnicosDisponibles(t) == ∅ then 
+                                                        pedidosPendientes(t) ◌ d
+                                                    else 
+                                                        <> 
+                                                    fi 
+        pedidosPendientes(atenderPedido(t,t')) ≡    if pedidosPendientes(t) == vacia then 
+                                                         <>
+                                                    else 
+                                                        quitar(pedidosPendientes(t),masCercanoA(ubicacion(t,t'),pedidosPendientes(t)))
+                                                    fi 
+        ubicacion(solicitarTecnico(t,d),t') ≡   if t' ∈ tecnicosOcupados(t) then 
+                                                    ubicacion(t,t')
+                                                else 
+                                                    d
+                                                fi 
+        ubicacion(atenderPedido(t,t'),t'') ≡    if t' == t'' ∧ long(pedidosPendientes(t)) > 0 then 
+                                                    masCercanoA(t,t',minDist(t,t',pedidosPendientes(t)))
+                                                else 
+                                                    ubicacion(t'')
+                                                fi  
+        vecesVisitadas(crear(g),t,d) ≡ 0 
+        vecesVisitadas(solicitarTecnico(t,d),t',d) ≡    if d==d' ∧ t' ∈ tecnicosDisponibles(t) ∧ t' == dameUno(tecnicosDisponibles(t)) then 
+                                                            1 + vecesVisitadas(t,t',d)
+                                                        else
+                                                            vecesVisitadas(t,t',d)
+                                                        fi  
+        vecesVisitadas(atenderPedido(t,t'),t'',d) ≡ if t' == t'' ∧ ¬vacia?(pedidosPendientes(t)) ∧ d == masCercanoA(pedidosPendientes(t),ubicacion(t')) then 
+                                                        1 + vecesVisitadas(t,t'',d)
+                                                    else 
+                                                        vecesVisitadas(t,t'',d)
+                                                    fi 
+
+        tecnicosOcupados(t) ≡ grupoDeTecnicos(t) \ tecnicosDisponibles(t)
+
+        tecnicosQueMasVisitaronA(t,d,ts) ≡  if ∅?(ts) then 
+                                                ∅
+                                            else 
+                                                if vecesVisitadas(dameUno(ts),d) == maxVisitas(t,grupoDeTecnicos(t),d) then 
+                                                    Ag(dameUno(ts),tecnicosQueMasVisitaronA(t,d,sinUno(ts)))
+                                                else 
+                                                    tecnicosQueMasVisitaronA(t,d,sinUno(ts))
+                                                fi 
+                                            fi 
+        
+        maxVisitas(t,ts,d) ≡    if ∅?(ts) then 
+                                    0 
+                                else 
+                                    max{vecesVisitadas(t,dameUno(ts),d), maxVisitas(t,sinUno(ts),d)}
+                                fi  
+        
+        masCercanoA(t,t',sd) ≡ prim(sd)
+
+        minDist(t,t',sd) ≡  if vacia?(sd) then 
+                                    <>
+                                else 
+                                    if prim(sd) == minDist(t',sd) then 
+                                        prim(sd) ◌ masCercanosA(t,t',fin(sd))
+                                    else 
+                                        masCercanosA(t,t',fin(sd))
+                                    fi 
+                                fi 
+Fin TAD
+
+TAD Direccion
+
+    géneros: direccion
+    exporta: observadores básicos, generadores
+    usa: bool, nat
+
+    generadores:
+        nuevaDireccion: string d × nat n → direccion
+
+    observadores básicos:
+        calle: direccion → string
+        numero: direccion → nat
+
+    otras operaciones:
+        dist: direccion d × direccion d' → nat
+
+    axiomas:
+        ...
+
+Fin TAD
